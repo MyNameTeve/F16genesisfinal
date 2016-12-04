@@ -59,16 +59,20 @@ module sega_genesis_top(
     logic Z80_mreq;
     logic Z80_rd;
     logic Z80_wr;
+    
+    logic ROM_as;
+    logic DMA_as;
        
-       
+    assign ROM_as = (M68_addr <= 24'h400000) ? 0 : 1;
+    assign DMA_as = (M68_addr >= 24'hFF0000) ? 0 : 1;  
         
-    ROM_Handler_Top_wrapper rom(.addr(M68_addr),.as(M68_as),.clk(M68_CLK),.data(M68_data_in),.dtack(M68_dtack));
+    ROM_Handler_Top_wrapper rom(.addr(M68_addr),.as(ROM_as),.clk(M68_CLK),.data(M68_data_in),.dtack(M68_dtack));
        
     z80_top_direct_n z80(.nM1(), .nMREQ(Z80_mreq), .nIORQ(), .nRD(Z80_rd), .nWR(Z80_wr), .nRFSH(),
                          .nHALT(), .nBUSACK(Z80_busack), .nWAIT(), .nNMI(), .nRESET(CPU_RESETN),.nBUSRQ(),
                          .CLK(Z80_clk), .A(Z80_addr), .D(Z80_data));
                          
-    DMA_top_wrapper dma(.HINT(),.HINT_ACK(),.HV_count(),.M68_addr(),.M68_as(),
+    DMA_top_wrapper dma(.HINT(),.HINT_ACK(),.HV_count(),.M68_addr(),.M68_as(DMA_as),
             .M68_data_in(),.M68_data_out(),.M68_dtack(),.M68_lds(),.M68_rw(),
                              .M68_uds(),.VDP_A(),.VDP_DI(),.VDP_DO(),.VDP_DTACK_N(),
                              .VDP_LDS_N(),.VDP_RNW(),.VDP_SEL(),.VDP_UDS_N(),.VDP_VBUS_DATA(),
