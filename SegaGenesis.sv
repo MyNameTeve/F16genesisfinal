@@ -59,6 +59,8 @@ module sega_genesis_top(
     logic Z80_mreq;
     logic Z80_rd;
     logic Z80_wr;
+    logic Z80_rfsh;
+    logic Z80_halt;
     
     logic ROM_as;
     logic DMA_as;
@@ -68,8 +70,8 @@ module sega_genesis_top(
         
     ROM_Handler_Top_wrapper rom(.addr(M68_addr),.as(ROM_as),.clk(M68_CLK),.data(M68_data_in),.dtack(M68_dtack));
        
-    z80_top_direct_n z80(.nM1(), .nMREQ(Z80_mreq), .nIORQ(), .nRD(Z80_rd), .nWR(Z80_wr), .nRFSH(),
-                         .nHALT(), .nBUSACK(Z80_busack), .nWAIT(), .nNMI(), .nRESET(CPU_RESETN),.nBUSRQ(),
+    z80_top_direct_n z80(.nM1(), .nMREQ(Z80_mreq), .nIORQ(), .nRD(Z80_rd), .nWR(Z80_wr), .nRFSH(Z80_rfsh),
+                         .nHALT(Z80_halt), .nBUSACK(Z80_busack), .nWAIT(), .nNMI(1'b1), .nRESET(CPU_RESETN),.nBUSRQ(),
                          .CLK(Z80_clk), .A(Z80_addr), .D(Z80_data));
                          
     DMA_top_wrapper dma(.HINT(),.HINT_ACK(),.HV_count(),.M68_addr(),.M68_as(DMA_as),
