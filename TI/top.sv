@@ -21,55 +21,56 @@
 
 module top(
     input logic CLK100MHZ, CPU_RESETN,
-    input logic [15:0] SW,
+    input logic [1:0] SW,
+    input logic BTNC,
     output logic AUD_PWM, 
-    output logic [1:0] JA
+    output logic [1:0] JA,
+    output logic [10:0] LED
 );
-    /*
-    logic CLK100MHZ, CPU_RESETN;
-    logic [15:0] SW;
-    logic AUD_PWM;
-    */
+    
+    //logic CLK100MHZ, CPU_RESETN;
+    //logic [15:0] SW;
+    //logic AUD_PWM;
+    
     assign JA[1] = AUD_PWM;
     assign JA[0] = 1'b1;
+    
+    assign LED[9:0] = tone0;
     
     logic nWE, nCE;
     logic CLK;
     logic [7:0] D;
-    logic READY, AOUT;
+    logic READY;
     
     logic [4:0] divider;
     logic [15:0] music_unit;
     logic [24:0] music_ctr;
     logic latch;
+    logic [9:0] tone0;
     
-    ti_top ti(.nWE, .nCE, .CLK, .nRST(CPU_RESETN), .D, .READY, .AOUT(AUD_PWM));
+    ti_top ti(.nWE(nWE), .nCE(nCE), .CLK(CLK), .nRST(CPU_RESETN), .D(D), .READY(READY), .AOUT(AUD_PWM), .tone0(tone0));
     
     enum logic [2:0] {
         START, IDLE, SET_TONE_1, WAIT_1_PWM, WAIT_2_PWM, SET_VOLUME_1
     } state, nextState;
     
+    
     always_ff @(posedge CLK100MHZ, negedge CPU_RESETN) begin
-        if (~CPU_RESETN) begin
+        if(!CPU_RESETN) begin
             CLK <= 0;
             divider <= 0;
             music_unit <= 0;
             music_ctr <= 0;
-            nWE <= 1;
-            nCE <= 1;
             state <= START;
             latch <= 1;
-        end
-        else begin
-            nWE <= 0;
-            nCE <= 0;
+         end
+         else begin
             state <= nextState;
-            if (divider == 27) begin
+            if (divider == 13) begin
                 divider <= 0;
-                CLK <= 1;
+                CLK <= ~CLK;
             end
             else begin
-                CLK <= 0;
                 divider <= divider + 1;
             end
             if (music_ctr == 2500000) begin
@@ -85,56 +86,76 @@ module top(
     always_comb begin
         case (state)
             START: begin
-                nextState = SET_TONE_1;
+                nextState = SET_TONE_1; 
+                nWE = 1;
+                nCE = 1;
             end
             SET_TONE_1: begin
                 nextState = WAIT_1_PWM;
             end
-            SET_VOLUME_1: begin
-                nextState = WAIT_1_PWM;        
+            SET_VOLUME_1: begin   
+                nextState = WAIT_1_PWM;     
             end
             WAIT_1_PWM: begin
-                if (divider == 27) begin
-                    nextState = WAIT_2_PWM;
+                nWE = 0;
+                nCE = 0;
+                if(READY) begin
+                    nextState = WAIT_1_PWM;
                 end
                 else begin
-                    nextState = WAIT_1_PWM;
+                    nextState = WAIT_2_PWM;
                 end
             end
             WAIT_2_PWM: begin
-                if (divider == 27) begin
-                    nextState = (~D[7]) ? SET_VOLUME_1 : SET_TONE_1;
-                end
-                else begin
-                    nextState = WAIT_2_PWM;
-                end
+                nWE = 1;
+                nCE = 1;
+                nextState = READY ? ((!D[7]) ? SET_VOLUME_1 : SET_TONE_1) : WAIT_2_PWM;
             end
-            default: nextState = START;
         endcase
     end
     
     always_ff @(posedge CLK100MHZ) begin
         case (state)
             START: begin
-            
+                           
             end
-            SET_TONE_1: begin
+            SET_TONE_1: begin    
                 if (latch) begin
-                    D <= 8'b10001001;
+                    if(BTNC) begin
+                        D <= 8'b10001001;
+                        LED[10] <= 1'b1;
+                    end
+                    else begin
+                        D <= 8'b10000101;
+                        LED[10] <= 1'b0;
+                    end
                 end
                 else begin
-                    D <= 8'b00111111;
+                    if(BTNC) begin
+                        D <= 8'b00111111;
+                        LED[10] <= 1'b1;
+                    end
+                    else begin
+                        D <= 8'b00000101;
+                        LED[10] <= 1'b0;
+                    end
                 end
             end
             SET_VOLUME_1: begin
-                D <= 8'b10010000;
+                
+                D <= 8'b10010001;
             end
             WAIT_1_PWM: begin
+                
             end
             WAIT_2_PWM: begin
                 if (D[7] == 1) begin
                     latch <= D[4];
                 end
+                
+                
+                //latch remains 0 at the end of the second SET TONE
+                //latch is a 1 at the end of SET VOLUME
             end
             default: begin
                 D <= 0;
@@ -152,9 +173,11 @@ module top(
         CPU_RESETN <= 1;
         @(posedge CLK100MHZ);
         CPU_RESETN <= 0;
+        SW[0] <= 1;
         @(posedge CLK100MHZ);
         CPU_RESETN <= 1;
         @(posedge CLK100MHZ);
-    end
-    */
+        #15000000 SW[0] <= 1'b0;
+    end*/
+    
 endmodule

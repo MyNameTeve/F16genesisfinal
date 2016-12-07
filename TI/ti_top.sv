@@ -18,16 +18,21 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
+//
+
 
 module ti_top(
     input logic nWE, nCE,
     input logic CLK, nRST,
     input logic [7:0] D,
-    output logic READY, AOUT);
+    output logic READY, AOUT,// NOTINIT, isLATCH, isLAATCH,
+    output logic [9:0] tone0 );
     
     logic [3:0] clkDivider;
     logic [3:0] vol0, vol1, vol2, vol3;
-    logic [9:0] tone0, tone1, tone2;
+     
+    (* mark_debug = "true" *)
+    logic [9:0] tone1, tone2;
     logic [2:0] noise;
     logic [1:0] channel;
     logic latch;
@@ -41,19 +46,23 @@ module ti_top(
     logic [14:0] digital_out;
     logic [5:0] digital_storage, pwm_counter;
     
+    assign NOTINIT = (state != INIT);
+    assign isLATCH = (state == DATA);
+    assign isLAATCH = latch;
+    
     enum logic [1:0] {
         INIT, LATCH, DATA
     } state, nextState;
     
-    right_shift_register rsr(.CLK(ch3out), .nRST, .DATA_IN(shift_data_in), .BIT_OUT(shift_data_out), .bitShiftReg(shiftRegister));
+    right_shift_register rsr(.CLK(ch3out), .nRST(nRST), .DATA_IN(shift_data_in), .BIT_OUT(shift_data_out), .bitShiftReg(shiftRegister));
     
-    ti_mixer mix(.CLK, .nRST, .vol0, .vol1, .vol2, .vol3, .ch0out, .ch1out,
-                 .ch2out, .ch3out(shift_data_out), .digital_out);
+    ti_mixer mix(.CLK(CLK), .nRST(nRST), .vol0(vol0), .vol1(vol1), .vol2(vol2), .vol3(vol3), .ch0out(ch0out), .ch1out(ch1out),
+                 .ch2out(ch2out), .ch3out(shift_data_out), .digital_out(digital_out));
     
     assign shift_data_in = noise[2] ? (shiftRegister[3] ^ shiftRegister[0]) : shiftRegister[0]; 
     
     always_ff @(posedge CLK, negedge nRST) begin
-        if (~nRST) begin
+        if (!nRST) begin
             state <= INIT;
             clkDivider <= 0;
             counter0 <= 0;
@@ -69,9 +78,9 @@ module ti_top(
             vol1 <= 4'b1111;
             vol2 <= 4'b1111;
             vol3 <= 4'b1111;
-            tone0 <= 10'b1111111111;
-            tone1 <= 10'b1111111111;
-            tone2 <= 10'b1111111111;
+            tone0 <= 10'b0110101100;
+            tone1 <= 10'b0100011101;
+            tone2 <= 10'b0011010110;
             noise <= 3'b111;
         end
         else begin
@@ -91,21 +100,24 @@ module ti_top(
             if (clkDivider == 0) begin
                 if (counter0 == 0) begin
                     counter0 <= tone0;
-                    ch0out <= ~ch0out;
+                    if (tone0 != 10'b1111111111)
+                        ch0out <= ~ch0out;
                 end
                 else begin
                     counter0 <= counter0 - 1;
                 end
                 if (counter1 == 0) begin
                     counter1 <= tone1;
-                    ch1out <= ~ch1out;
+                    if (tone1 != 10'b1111111111)
+                        ch1out <= ~ch1out;
                 end
                 else begin
                     counter1 <= counter1 - 1;
                 end
                 if (counter2 == 0) begin
                     counter2 <= tone2;
-                    ch2out <= ~ch2out;
+                    if (tone2 != 10'b1111111111)
+                        ch2out <= ~ch2out;
                 end
                 else begin
                     counter2 <= counter2 - 1;
@@ -130,7 +142,8 @@ module ti_top(
     always_comb begin
         case (state)
             INIT: begin
-                if (~nWE && ~nCE) begin
+                READY = 1;
+                if (!nWE && !nCE) begin
                     nextState = (D[7] == 1) ? LATCH : DATA;
                 end
                 else begin
@@ -139,28 +152,29 @@ module ti_top(
             end
             
             LATCH: begin
+                READY = 0;
                 nextState = INIT;
             end
             
             DATA: begin
+                READY = 0;
                 nextState = INIT;
             end
             default: begin
+                READY = 0;
                 nextState = INIT;
             end
         endcase
     end
     
-    assign READY = 1;
-    
     always_ff @(posedge CLK, negedge nRST) begin
-        if (~nRST) begin
+        if (!nRST) begin
         
         end
         else begin
             case(state)
                 INIT: begin
-                    if (~nWE && ~nCE) begin
+                    if (!nWE && !nCE) begin
                         if (D[7] == 1) begin
                             channel <= D[6:5];
                             latch <= D[4];
@@ -174,28 +188,28 @@ module ti_top(
                 LATCH: begin
                     if (latch) begin
                         case(channel)
-                            0: vol0 <= storeD[3:0];
-                            1: vol1 <= storeD[3:0];
-                            2: vol2 <= storeD[3:0];
-                            3: vol3 <= storeD[3:0];
+                            2'b00: vol0 <= storeD[3:0];
+                            2'b01: vol1 <= storeD[3:0];
+                            2'b10: vol2 <= storeD[3:0];
+                            2'b11: vol3 <= storeD[3:0];
                         endcase
                     end
                     else begin
                         case(channel)
-                            0: tone0[3:0] <= storeD[3:0];
-                            1: tone1[3:0] <= storeD[3:0];
-                            2: tone2[3:0] <= storeD[3:0];
-                            3: noise <= storeD[2:0];
+                            2'b00: tone0[3:0] <= storeD[3:0];
+                            2'b01: tone1[3:0] <= storeD[3:0];
+                            2'b10: tone2[3:0] <= storeD[3:0];
+                            2'b11: noise <= storeD[2:0];
                         endcase
                     end
                 end
                 DATA: begin
-                    if (~latch) begin
+                    if (!latch) begin
                         case (channel)
-                            0: tone0[9:4] <= storeD[5:0];
-                            1: tone1[9:4] <= storeD[5:0];
-                            2: tone2[9:4] <= storeD[5:0];
-                            3: noise <= storeD[2:0];
+                            2'b00: tone0[9:4] <= storeD[5:0];
+                            2'b01: tone1[9:4] <= storeD[5:0];
+                            2'b10: tone2[9:4] <= storeD[5:0];
+                            2'b11: noise <= storeD[2:0];
                         endcase   
                     end 
                 end

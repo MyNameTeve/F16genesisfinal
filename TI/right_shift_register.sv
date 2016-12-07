@@ -8,7 +8,7 @@ module right_shift_register(
     output logic [7:0] bitShiftReg); //Need outside module to access the register
     
     always @(posedge CLK, negedge nRST) begin
-        if (~nRST) begin
+        if (!nRST) begin
             bitShiftReg <= 8'b00000000;
         end
         else begin
