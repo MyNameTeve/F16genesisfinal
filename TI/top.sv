@@ -22,8 +22,17 @@
 module top(
     input logic CLK100MHZ, CPU_RESETN,
     input logic [15:0] SW,
-    output logic AUD_PWM
+    output logic AUD_PWM, 
+    output logic [1:0] JA
 );
+    /*
+    logic CLK100MHZ, CPU_RESETN;
+    logic [15:0] SW;
+    logic AUD_PWM;
+    */
+    assign JA[1] = AUD_PWM;
+    assign JA[0] = 1'b1;
+    
     logic nWE, nCE;
     logic CLK;
     logic [7:0] D;
@@ -34,7 +43,7 @@ module top(
     logic [24:0] music_ctr;
     logic latch;
     
-    ti_top(.nWE, .nCE, .CLK, .nRST(CPU_RESETN), .D, .READY, .AOUT(AUD_PWM));
+    ti_top ti(.nWE, .nCE, .CLK, .nRST(CPU_RESETN), .D, .READY, .AOUT(AUD_PWM));
     
     enum logic [2:0] {
         START, IDLE, SET_TONE_1, WAIT_1_PWM, WAIT_2_PWM, SET_VOLUME_1
@@ -88,39 +97,64 @@ module top(
                 if (divider == 27) begin
                     nextState = WAIT_2_PWM;
                 end
+                else begin
+                    nextState = WAIT_1_PWM;
+                end
             end
             WAIT_2_PWM: begin
                 if (divider == 27) begin
                     nextState = (~D[7]) ? SET_VOLUME_1 : SET_TONE_1;
                 end
+                else begin
+                    nextState = WAIT_2_PWM;
+                end
             end
+            default: nextState = START;
         endcase
     end
     
-    always_comb begin
+    always_ff @(posedge CLK100MHZ) begin
         case (state)
             START: begin
             
             end
             SET_TONE_1: begin
                 if (latch) begin
-                    D = 8'b10001110;
+                    D <= 8'b10001001;
                 end
                 else begin
-                    D = 8'b00001111;
+                    D <= 8'b00111111;
                 end
             end
             SET_VOLUME_1: begin
-                D = 8'b10010000;
+                D <= 8'b10010000;
             end
             WAIT_1_PWM: begin
             end
             WAIT_2_PWM: begin
                 if (D[7] == 1) begin
-                    latch = D[4];
+                    latch <= D[4];
                 end
+            end
+            default: begin
+                D <= 0;
+                latch <= 0;
             end
         endcase
     end
-
+    /*
+    initial begin
+        CLK100MHZ <= 0;
+        forever #5 CLK100MHZ <= ~CLK100MHZ;
+    end
+    
+    initial begin
+        CPU_RESETN <= 1;
+        @(posedge CLK100MHZ);
+        CPU_RESETN <= 0;
+        @(posedge CLK100MHZ);
+        CPU_RESETN <= 1;
+        @(posedge CLK100MHZ);
+    end
+    */
 endmodule

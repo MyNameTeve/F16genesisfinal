@@ -75,7 +75,11 @@ module ti_top(
             noise <= 3'b111;
         end
         else begin
-            if (pwm_counter == 0) begin
+            if (pwm_counter == 0 && digital_storage == 0) begin
+                digital_storage <= digital_out[14:9];
+                AOUT <= 0;
+            end
+            else if (pwm_counter == 0) begin
                 digital_storage <= digital_out[14:9];
                 AOUT <= 1;
             end
@@ -141,58 +145,75 @@ module ti_top(
             DATA: begin
                 nextState = INIT;
             end
+            default: begin
+                nextState = INIT;
+            end
         endcase
     end
     
-    always_comb begin
-        case(state)
-            INIT: begin
-                if (~nWE && ~nCE) begin
-                    READY = 0;
-                    if (D[7] == 1) begin
-                        channel = D[6:5];
-                        latch = D[4];
-                        storeD[3:0] = D[3:0];
+    assign READY = 1;
+    
+    always_ff @(posedge CLK, negedge nRST) begin
+        if (~nRST) begin
+        
+        end
+        else begin
+            case(state)
+                INIT: begin
+                    if (~nWE && ~nCE) begin
+                        if (D[7] == 1) begin
+                            channel <= D[6:5];
+                            latch <= D[4];
+                            storeD[3:0] <= D[3:0];
+                        end
+                        else begin //D[7] == 0
+                            storeD[5:0] <= D[5:0];
+                        end
                     end
-                    else begin //D[7] == 0
-                        storeD[5:0] = D[5:0];
+                end
+                LATCH: begin
+                    if (latch) begin
+                        case(channel)
+                            0: vol0 <= storeD[3:0];
+                            1: vol1 <= storeD[3:0];
+                            2: vol2 <= storeD[3:0];
+                            3: vol3 <= storeD[3:0];
+                        endcase
+                    end
+                    else begin
+                        case(channel)
+                            0: tone0[3:0] <= storeD[3:0];
+                            1: tone1[3:0] <= storeD[3:0];
+                            2: tone2[3:0] <= storeD[3:0];
+                            3: noise <= storeD[2:0];
+                        endcase
                     end
                 end
-                else begin
-                    READY = 1;
+                DATA: begin
+                    if (~latch) begin
+                        case (channel)
+                            0: tone0[9:4] <= storeD[5:0];
+                            1: tone1[9:4] <= storeD[5:0];
+                            2: tone2[9:4] <= storeD[5:0];
+                            3: noise <= storeD[2:0];
+                        endcase   
+                    end 
                 end
-            end
-            LATCH: begin
-                READY = 0;
-                if (latch) begin
-                    case(channel)
-                        0: vol0 = storeD[3:0];
-                        1: vol1 = storeD[3:0];
-                        2: vol2 = storeD[3:0];
-                        3: vol3 = storeD[3:0];
-                    endcase
+                default: begin
+                    channel <= 0;
+                    latch <= 0;
+                    storeD <= 0;
+                    vol0 <= 0;
+                    vol1 <= 0;
+                    vol2 <= 0;
+                    vol3 <= 0;
+                    tone0 <= 0;
+                    tone1 <= 0;
+                    tone2 <= 0;
+                    noise <= 0;
                 end
-                else begin
-                    case(channel)
-                        0: tone0[3:0] = storeD[3:0];
-                        1: tone1[3:0] = storeD[3:0];
-                        2: tone2[3:0] = storeD[3:0];
-                        3: noise = storeD[2:0];
-                    endcase
-                end
-            end
-            DATA: begin
-                READY = 0;
-                if (~latch) begin
-                    case (channel)
-                        0: tone0[9:4] = storeD[5:0];
-                        1: tone1[9:4] = storeD[5:0];
-                        2: tone2[9:4] = storeD[5:0];
-                        3: noise = storeD[2:0];
-                    endcase   
-                end 
-            end
-        endcase
+            endcase
+        end
     end
     
 endmodule

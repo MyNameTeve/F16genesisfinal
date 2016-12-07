@@ -21,7 +21,7 @@ module ti_mixer(
             intermediate <= (ch0out * volume_table[vol0] + 
                             ch1out * volume_table[vol1] +
                             ch2out * volume_table[vol2] +
-                            ch3out * volume_table[vol3]) / 4;
+                            ch3out * volume_table[vol3]);
         end
     end
     
