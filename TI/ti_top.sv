@@ -24,11 +24,14 @@
 module ti_top(
     input logic nWE, nCE,
     input logic CLK, nRST,
+    (* mark_debug = "true" *)
     input logic [7:0] D,
     output logic READY, AOUT,// NOTINIT, isLATCH, isLAATCH,
+    (* mark_debug = "true" *)
     output logic [9:0] tone0 );
     
     logic [3:0] clkDivider;
+    (* mark_debug = "true" *)
     logic [3:0] vol0, vol1, vol2, vol3;
      
     (* mark_debug = "true" *)
@@ -40,6 +43,7 @@ module ti_top(
     logic [5:0] storeD;
     
     logic [9:0] counter0, counter1, counter2, counter3;
+    (* mark_debug = "true" *)
     logic ch0out, ch1out, ch2out, ch3out;
     logic [7:0] shiftRegister;
     logic shift_data_in, shift_data_out;
@@ -74,14 +78,6 @@ module ti_top(
             ch1out <= 0;
             ch2out <= 0;
             ch3out <= 0;
-            vol0 <= 4'b1111;
-            vol1 <= 4'b1111;
-            vol2 <= 4'b1111;
-            vol3 <= 4'b1111;
-            tone0 <= 10'b0110101100;
-            tone1 <= 10'b0100011101;
-            tone2 <= 10'b0011010110;
-            noise <= 3'b111;
         end
         else begin
             if (pwm_counter == 0 && digital_storage == 0) begin
@@ -169,7 +165,17 @@ module ti_top(
     
     always_ff @(posedge CLK, negedge nRST) begin
         if (!nRST) begin
-        
+            channel <= 0;
+            latch <= 0;
+            storeD <= 0;
+            vol0 <= 4'b0100;
+            vol1 <= 4'b1111;
+            vol2 <= 4'b1111;
+            vol3 <= 4'b1111;
+            tone0 <= 10'b0110101100;
+            tone1 <= 10'b1111111111;//100011101
+            tone2 <= 10'b1111111111;//0011010110
+            noise <= 3'b111;
         end
         else begin
             case(state)

@@ -9,7 +9,7 @@ module right_shift_register(
     
     always @(posedge CLK, negedge nRST) begin
         if (!nRST) begin
-            bitShiftReg <= 8'b00000000;
+            bitShiftReg <= 8'b01010101;
         end
         else begin
             bitShiftReg <= {DATA_IN, bitShiftReg[7:1]};

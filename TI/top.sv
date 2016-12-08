@@ -24,16 +24,21 @@ module top(
     input logic [1:0] SW,
     input logic BTNC,
     output logic AUD_PWM, 
+    output logic AUD_SD,
     output logic [1:0] JA,
     output logic [10:0] LED
 );
     
-    //logic CLK100MHZ, CPU_RESETN;
-    //logic [15:0] SW;
-    //logic AUD_PWM;
+    /*logic CLK100MHZ, CPU_RESETN;
+    logic [15:0] SW;
+    logic AUD_PWM;
+    logic BTNC;
+    logic [10:0] LED;*/
+    
     
     assign JA[1] = AUD_PWM;
     assign JA[0] = 1'b1;
+    assign AUD_SD = 1'b1;
     
     assign LED[9:0] = tone0;
     
@@ -50,6 +55,7 @@ module top(
     
     ti_top ti(.nWE(nWE), .nCE(nCE), .CLK(CLK), .nRST(CPU_RESETN), .D(D), .READY(READY), .AOUT(AUD_PWM), .tone0(tone0));
     
+    (* mark_debug = "true" *)
     enum logic [2:0] {
         START, IDLE, SET_TONE_1, WAIT_1_PWM, WAIT_2_PWM, SET_VOLUME_1
     } state, nextState;
@@ -80,6 +86,53 @@ module top(
             else begin
                 music_ctr <= music_ctr + 1;
             end
+            case (state)
+                START: begin
+                                     
+                end
+                SET_TONE_1: begin    
+                    if (latch) begin
+                       if(BTNC) begin
+                            D <= 8'b10001001; //    1111111001 0x3F9 1017  0110100101
+                            LED[10] <= 1'b1;
+                       end
+                       else begin
+                            D <= 8'b10000101; //    0001010101 0x55 85     0110101001
+                            LED[10] <= 1'b0;
+                       end
+                    end
+                    else begin
+                        if(BTNC) begin
+                            D <= 8'b00111111;
+                            LED[10] <= 1'b1;
+                        end
+                        else begin
+                            D <= 8'b00000101;
+                            LED[10] <= 1'b0;
+                        end
+                    end
+                end
+                SET_VOLUME_1: begin
+                       
+                    D <= 8'b10010001; //1001 1
+                end
+                WAIT_1_PWM: begin
+                         
+                end
+                WAIT_2_PWM: begin
+                    if (D[7] == 1) begin
+                        latch <= D[4];
+                    end
+                            
+                            
+                //latch remains 0 at the end of the second SET TONE
+                //latch is a 1 at the end of SET VOLUME
+                end
+                default: begin
+                    D <= 0;
+                    latch <= 0;
+                end
+            endcase
         end
     end
     
@@ -114,57 +167,7 @@ module top(
         endcase
     end
     
-    always_ff @(posedge CLK100MHZ) begin
-        case (state)
-            START: begin
-                           
-            end
-            SET_TONE_1: begin    
-                if (latch) begin
-                    if(BTNC) begin
-                        D <= 8'b10001001;
-                        LED[10] <= 1'b1;
-                    end
-                    else begin
-                        D <= 8'b10000101;
-                        LED[10] <= 1'b0;
-                    end
-                end
-                else begin
-                    if(BTNC) begin
-                        D <= 8'b00111111;
-                        LED[10] <= 1'b1;
-                    end
-                    else begin
-                        D <= 8'b00000101;
-                        LED[10] <= 1'b0;
-                    end
-                end
-            end
-            SET_VOLUME_1: begin
-                
-                D <= 8'b10010001;
-            end
-            WAIT_1_PWM: begin
-                
-            end
-            WAIT_2_PWM: begin
-                if (D[7] == 1) begin
-                    latch <= D[4];
-                end
-                
-                
-                //latch remains 0 at the end of the second SET TONE
-                //latch is a 1 at the end of SET VOLUME
-            end
-            default: begin
-                D <= 0;
-                latch <= 0;
-            end
-        endcase
-    end
-    /*
-    initial begin
+    /*initial begin
         CLK100MHZ <= 0;
         forever #5 CLK100MHZ <= ~CLK100MHZ;
     end
@@ -173,11 +176,11 @@ module top(
         CPU_RESETN <= 1;
         @(posedge CLK100MHZ);
         CPU_RESETN <= 0;
-        SW[0] <= 1;
+        BTNC <= 1;
         @(posedge CLK100MHZ);
         CPU_RESETN <= 1;
         @(posedge CLK100MHZ);
-        #15000000 SW[0] <= 1'b0;
+        #15000000 BTNC <= 1'b0;
     end*/
     
 endmodule
