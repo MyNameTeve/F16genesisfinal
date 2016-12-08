@@ -21,26 +21,9 @@
 
 module top(
     input logic CLK100MHZ, CPU_RESETN,
-    input logic [1:0] SW,
-    input logic BTNC,
-    output logic AUD_PWM, 
-    output logic AUD_SD,
-    output logic [1:0] JA,
-    output logic [10:0] LED
+    output logic AUD_PWM, AUD_SD
 );
-    
-    /*logic CLK100MHZ, CPU_RESETN;
-    logic [15:0] SW;
-    logic AUD_PWM;
-    logic BTNC;
-    logic [10:0] LED;*/
-    
-    
-    assign JA[1] = AUD_PWM;
-    assign JA[0] = 1'b1;
     assign AUD_SD = 1'b1;
-    
-    assign LED[9:0] = tone0;
     
     logic nWE, nCE;
     logic CLK;
@@ -53,7 +36,7 @@ module top(
     logic latch;
     logic [9:0] tone0;
     
-    ti_top ti(.nWE(nWE), .nCE(nCE), .CLK(CLK), .nRST(CPU_RESETN), .D(D), .READY(READY), .AOUT(AUD_PWM), .tone0(tone0));
+    ti_top ti(.nWE(nWE), .nCE(nCE), .CLK(CLK), .nRST(CPU_RESETN), .D(D), .READY(READY), .AOUT(AUD_PWM));
     
     (* mark_debug = "true" *)
     enum logic [2:0] {
@@ -79,9 +62,9 @@ module top(
             else begin
                 divider <= divider + 1;
             end
-            if (music_ctr == 2500000) begin
+            if (music_ctr == 25'd25000000) begin
                 music_ctr <= 0;
-                music_unit = music_unit + 1;
+                music_unit <= music_unit + 1;
             end
             else begin
                 music_ctr <= music_ctr + 1;
@@ -92,28 +75,171 @@ module top(
                 end
                 SET_TONE_1: begin    
                     if (latch) begin
-                       if(BTNC) begin
-                            D <= 8'b10001001; //    1111111001 0x3F9 1017  0110100101
-                            LED[10] <= 1'b1;
-                       end
-                       else begin
-                            D <= 8'b10000101; //    0001010101 0x55 85     0110101001
-                            LED[10] <= 1'b0;
-                       end
-                    end
-                    else begin
-                        if(BTNC) begin
-                            D <= 8'b00111111;
-                            LED[10] <= 1'b1;
+                        if (music_unit == 0 || // E
+                            music_unit == 1 ||
+                            music_unit == 12 ||
+                            music_unit == 13 ||
+                            music_unit == 22 ||
+                            music_unit == 23 ||
+                            music_unit == 40 ||
+                            music_unit == 41 ||
+                            music_unit == 42 ||
+                            music_unit == 44 ||
+                            music_unit == 45 ||
+                            music_unit == 54 ||
+                            music_unit == 55) begin
+                            D <= 8'b10001010;
+                        end
+                        else if (music_unit == 2 || // B
+                                 music_unit == 7 ||
+                                 music_unit == 16 ||
+                                 music_unit == 17 ||
+                                 music_unit == 48 ||
+                                 music_unit == 50) begin
+                            D <= 8'b10000010;
+                        end
+                        else if (music_unit == 3 ||
+                                 music_unit == 6 ||
+                                 music_unit == 11 ||
+                                 music_unit == 15 ||
+                                 music_unit == 19 ||
+                                 music_unit == 24 ||
+                                 music_unit == 25 ||
+                                 music_unit == 43 ||
+                                 music_unit == 47 ||
+                                 music_unit == 51 ||
+                                 music_unit == 56 ||
+                                 music_unit == 57) // C
+                        begin
+                            D <= 8'b10000110;
+                        end
+                        else if (music_unit == 4 || // D
+                                 music_unit == 5 ||
+                                 music_unit == 14 ||
+                                 music_unit == 20 ||
+                                 music_unit == 21 ||
+                                 music_unit == 33 ||
+                                 music_unit == 34 ||
+                                 music_unit == 46 ||
+                                 music_unit == 52 ||
+                                 music_unit == 53) begin
+                            D <= 8'b10001110;     
+                        end
+                        else if (music_unit == 8 ||
+                                 music_unit == 10 ||
+                                 music_unit == 26 ||
+                                 music_unit == 28 ||
+                                 music_unit == 29 ||
+                                 music_unit == 30 ||
+                                 music_unit == 31 ||
+                                 music_unit == 58 ||
+                                 music_unit == 60 ||
+                                 music_unit == 61 ||
+                                 music_unit == 62 ||
+                                 music_unit == 63) // A4
+                        begin
+                            D <= 8'b10001110;
+                        end
+                        else if (music_unit == 36 ||
+                                 music_unit == 37) // A5
+                        begin
+                            D <= 8'b10001111;
+                        end
+                        else if (music_unit == 35 ||
+                                 music_unit == 39) begin //F
+                            D <= 8'b10000000;
+                        end
+                        else if (music_unit == 38) begin // G5
+                            D <= 8'b10001111;
                         end
                         else begin
-                            D <= 8'b00000101;
-                            LED[10] <= 1'b0;
+                            D <= 8'b10001111;
+                        end
+                    end
+                    else begin
+                        if (music_unit == 0 || // E
+                            music_unit == 1 ||
+                            music_unit == 12 ||
+                            music_unit == 13 ||
+                            music_unit == 22 ||
+                            music_unit == 23 ||
+                            music_unit == 40 ||
+                            music_unit == 41 ||
+                            music_unit == 42 ||
+                            music_unit == 44 ||
+                            music_unit == 45 ||
+                            music_unit == 54 ||
+                            music_unit == 55) begin
+                            D <= 8'b00001010;
+                        end
+                        else if (music_unit == 2 || // B
+                                 music_unit == 7 ||
+                                 music_unit == 16 ||
+                                 music_unit == 17 ||
+                                 music_unit == 48 ||
+                                 music_unit == 50) begin
+                            D <= 8'b00001110;
+                        end 
+                        else if (music_unit == 3 ||
+                                 music_unit == 6 ||
+                                 music_unit == 11 ||
+                                 music_unit == 15 ||
+                                 music_unit == 19 ||
+                                 music_unit == 24 ||
+                                 music_unit == 25 ||
+                                 music_unit == 43 ||
+                                 music_unit == 47 ||
+                                 music_unit == 51 ||
+                                 music_unit == 56 ||
+                                 music_unit == 57) // C 
+                        begin
+                            D <= 8'b00001101;
+                        end
+                        else if (music_unit == 4 || // D
+                                 music_unit == 5 ||
+                                 music_unit == 14 ||
+                                 music_unit == 20 ||
+                                 music_unit == 21 ||
+                                 music_unit == 33 ||
+                                 music_unit == 34 ||
+                                 music_unit == 46 ||
+                                 music_unit == 52 ||
+                                 music_unit == 53) begin
+                            D <= 8'b00001011;     
+                        end
+                        else if (music_unit == 8 ||
+                                 music_unit == 10 ||
+                                 music_unit == 26 ||
+                                 music_unit == 28 ||
+                                 music_unit == 29 ||
+                                 music_unit == 30 ||
+                                 music_unit == 31 ||
+                                 music_unit == 58 ||
+                                 music_unit == 60 ||
+                                 music_unit == 61 ||
+                                 music_unit == 62 ||
+                                 music_unit == 63) // A4
+                        begin
+                            D <= 8'b00001111;
+                        end
+                        else if (music_unit == 38) begin // G5
+                            D <= 8'b000001000;
+                        end
+                        else if (music_unit == 36 ||
+                                 music_unit == 37) // A5
+                        begin
+                            D <= 8'b00000111;
+                        end
+                        else if (music_unit == 35 ||
+                                 music_unit == 39) begin //F
+                            D <= 8'b00001010;
+                        end
+                        else begin
+                            D <= 8'b00111111;
                         end
                     end
                 end
-                SET_VOLUME_1: begin
-                       
+                SET_VOLUME_1: begin 
                     D <= 8'b10010001; //1001 1
                 end
                 WAIT_1_PWM: begin

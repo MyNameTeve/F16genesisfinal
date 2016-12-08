@@ -26,16 +26,14 @@ module ti_top(
     input logic CLK, nRST,
     (* mark_debug = "true" *)
     input logic [7:0] D,
-    output logic READY, AOUT,// NOTINIT, isLATCH, isLAATCH,
-    (* mark_debug = "true" *)
-    output logic [9:0] tone0 );
+    output logic READY, AOUT );
     
     logic [3:0] clkDivider;
     (* mark_debug = "true" *)
     logic [3:0] vol0, vol1, vol2, vol3;
      
     (* mark_debug = "true" *)
-    logic [9:0] tone1, tone2;
+    logic [9:0] tone0, tone1, tone2;
     logic [2:0] noise;
     logic [1:0] channel;
     logic latch;
@@ -49,10 +47,6 @@ module ti_top(
     logic shift_data_in, shift_data_out;
     logic [14:0] digital_out;
     logic [5:0] digital_storage, pwm_counter;
-    
-    assign NOTINIT = (state != INIT);
-    assign isLATCH = (state == DATA);
-    assign isLAATCH = latch;
     
     enum logic [1:0] {
         INIT, LATCH, DATA

@@ -317,22 +317,19 @@ set_property port_width 3 [get_debug_ports u_ila_0_0/probe13]
 connect_debug_port u_ila_0_0/probe13 [get_nets [list {nextState[0]} {nextState[1]} {nextState[2]}]]
 create_debug_port u_ila_0_0 probe
 set_property port_width 1 [get_debug_ports u_ila_0_0/probe14]
-connect_debug_port u_ila_0_0/probe14 [get_nets [list BTNC_IBUF]]
+connect_debug_port u_ila_0_0/probe14 [get_nets [list ti/ch0out]]
 create_debug_port u_ila_0_0 probe
 set_property port_width 1 [get_debug_ports u_ila_0_0/probe15]
-connect_debug_port u_ila_0_0/probe15 [get_nets [list ti/ch0out]]
+connect_debug_port u_ila_0_0/probe15 [get_nets [list ti/ch1out]]
 create_debug_port u_ila_0_0 probe
 set_property port_width 1 [get_debug_ports u_ila_0_0/probe16]
-connect_debug_port u_ila_0_0/probe16 [get_nets [list ti/ch1out]]
+connect_debug_port u_ila_0_0/probe16 [get_nets [list ti/ch2out]]
 create_debug_port u_ila_0_0 probe
 set_property port_width 1 [get_debug_ports u_ila_0_0/probe17]
-connect_debug_port u_ila_0_0/probe17 [get_nets [list ti/ch2out]]
+connect_debug_port u_ila_0_0/probe17 [get_nets [list ti/ch3out]]
 create_debug_port u_ila_0_0 probe
 set_property port_width 1 [get_debug_ports u_ila_0_0/probe18]
-connect_debug_port u_ila_0_0/probe18 [get_nets [list ti/ch3out]]
-create_debug_port u_ila_0_0 probe
-set_property port_width 1 [get_debug_ports u_ila_0_0/probe19]
-connect_debug_port u_ila_0_0/probe19 [get_nets [list CLK100MHZ_IBUF]]
+connect_debug_port u_ila_0_0/probe18 [get_nets [list CLK100MHZ_IBUF]]
 set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
 set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
 set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]
