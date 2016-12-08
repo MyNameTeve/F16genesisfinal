@@ -263,74 +263,74 @@ connect_debug_port u_ila_0_0/probe2 [get_nets [list {ti/tone2[0]} {ti/tone2[1]} 
 
 
 
-create_debug_core u_ila_0_0 ila
-set_property ALL_PROBE_SAME_MU true [get_debug_cores u_ila_0_0]
-set_property ALL_PROBE_SAME_MU_CNT 1 [get_debug_cores u_ila_0_0]
-set_property C_ADV_TRIGGER false [get_debug_cores u_ila_0_0]
-set_property C_DATA_DEPTH 16384 [get_debug_cores u_ila_0_0]
-set_property C_EN_STRG_QUAL false [get_debug_cores u_ila_0_0]
-set_property C_INPUT_PIPE_STAGES 0 [get_debug_cores u_ila_0_0]
-set_property C_TRIGIN_EN false [get_debug_cores u_ila_0_0]
-set_property C_TRIGOUT_EN false [get_debug_cores u_ila_0_0]
-set_property port_width 1 [get_debug_ports u_ila_0_0/clk]
-connect_debug_port u_ila_0_0/clk [get_nets [list CLK100MHZ_IBUF_BUFG]]
-set_property port_width 17 [get_debug_ports u_ila_0_0/probe0]
-connect_debug_port u_ila_0_0/probe0 [get_nets [list {ti/mix/intermediate[0]} {ti/mix/intermediate[1]} {ti/mix/intermediate[2]} {ti/mix/intermediate[3]} {ti/mix/intermediate[4]} {ti/mix/intermediate[5]} {ti/mix/intermediate[6]} {ti/mix/intermediate[7]} {ti/mix/intermediate[8]} {ti/mix/intermediate[9]} {ti/mix/intermediate[10]} {ti/mix/intermediate[11]} {ti/mix/intermediate[12]} {ti/mix/intermediate[13]} {ti/mix/intermediate[14]} {ti/mix/intermediate[15]} {ti/mix/intermediate[16]}]]
-create_debug_port u_ila_0_0 probe
-set_property port_width 17 [get_debug_ports u_ila_0_0/probe1]
-connect_debug_port u_ila_0_0/probe1 [get_nets [list {ti/mix/c3[0]} {ti/mix/c3[1]} {ti/mix/c3[2]} {ti/mix/c3[3]} {ti/mix/c3[4]} {ti/mix/c3[5]} {ti/mix/c3[6]} {ti/mix/c3[7]} {ti/mix/c3[8]} {ti/mix/c3[9]} {ti/mix/c3[10]} {ti/mix/c3[11]} {ti/mix/c3[12]} {ti/mix/c3[13]} {ti/mix/c3[14]} {ti/mix/c3[15]} {ti/mix/c3[16]}]]
-create_debug_port u_ila_0_0 probe
-set_property port_width 17 [get_debug_ports u_ila_0_0/probe2]
-connect_debug_port u_ila_0_0/probe2 [get_nets [list {ti/mix/c2[0]} {ti/mix/c2[1]} {ti/mix/c2[2]} {ti/mix/c2[3]} {ti/mix/c2[4]} {ti/mix/c2[5]} {ti/mix/c2[6]} {ti/mix/c2[7]} {ti/mix/c2[8]} {ti/mix/c2[9]} {ti/mix/c2[10]} {ti/mix/c2[11]} {ti/mix/c2[12]} {ti/mix/c2[13]} {ti/mix/c2[14]} {ti/mix/c2[15]} {ti/mix/c2[16]}]]
-create_debug_port u_ila_0_0 probe
-set_property port_width 17 [get_debug_ports u_ila_0_0/probe3]
-connect_debug_port u_ila_0_0/probe3 [get_nets [list {ti/mix/c1[0]} {ti/mix/c1[1]} {ti/mix/c1[2]} {ti/mix/c1[3]} {ti/mix/c1[4]} {ti/mix/c1[5]} {ti/mix/c1[6]} {ti/mix/c1[7]} {ti/mix/c1[8]} {ti/mix/c1[9]} {ti/mix/c1[10]} {ti/mix/c1[11]} {ti/mix/c1[12]} {ti/mix/c1[13]} {ti/mix/c1[14]} {ti/mix/c1[15]} {ti/mix/c1[16]}]]
-create_debug_port u_ila_0_0 probe
-set_property port_width 17 [get_debug_ports u_ila_0_0/probe4]
-connect_debug_port u_ila_0_0/probe4 [get_nets [list {ti/mix/c0[0]} {ti/mix/c0[1]} {ti/mix/c0[2]} {ti/mix/c0[3]} {ti/mix/c0[4]} {ti/mix/c0[5]} {ti/mix/c0[6]} {ti/mix/c0[7]} {ti/mix/c0[8]} {ti/mix/c0[9]} {ti/mix/c0[10]} {ti/mix/c0[11]} {ti/mix/c0[12]} {ti/mix/c0[13]} {ti/mix/c0[14]} {ti/mix/c0[15]} {ti/mix/c0[16]}]]
-create_debug_port u_ila_0_0 probe
-set_property port_width 4 [get_debug_ports u_ila_0_0/probe5]
-connect_debug_port u_ila_0_0/probe5 [get_nets [list {ti/vol2[0]} {ti/vol2[1]} {ti/vol2[2]} {ti/vol2[3]}]]
-create_debug_port u_ila_0_0 probe
-set_property port_width 10 [get_debug_ports u_ila_0_0/probe6]
-connect_debug_port u_ila_0_0/probe6 [get_nets [list {ti/tone0[0]} {ti/tone0[1]} {ti/tone0[2]} {ti/tone0[3]} {ti/tone0[4]} {ti/tone0[5]} {ti/tone0[6]} {ti/tone0[7]} {ti/tone0[8]} {ti/tone0[9]}]]
-create_debug_port u_ila_0_0 probe
-set_property port_width 4 [get_debug_ports u_ila_0_0/probe7]
-connect_debug_port u_ila_0_0/probe7 [get_nets [list {ti/vol1[0]} {ti/vol1[1]} {ti/vol1[2]} {ti/vol1[3]}]]
-create_debug_port u_ila_0_0 probe
-set_property port_width 10 [get_debug_ports u_ila_0_0/probe8]
-connect_debug_port u_ila_0_0/probe8 [get_nets [list {ti/tone1[0]} {ti/tone1[1]} {ti/tone1[2]} {ti/tone1[3]} {ti/tone1[4]} {ti/tone1[5]} {ti/tone1[6]} {ti/tone1[7]} {ti/tone1[8]} {ti/tone1[9]}]]
-create_debug_port u_ila_0_0 probe
-set_property port_width 4 [get_debug_ports u_ila_0_0/probe9]
-connect_debug_port u_ila_0_0/probe9 [get_nets [list {ti/vol3[0]} {ti/vol3[1]} {ti/vol3[2]} {ti/vol3[3]}]]
-create_debug_port u_ila_0_0 probe
-set_property port_width 4 [get_debug_ports u_ila_0_0/probe10]
-connect_debug_port u_ila_0_0/probe10 [get_nets [list {ti/vol0[0]} {ti/vol0[1]} {ti/vol0[2]} {ti/vol0[3]}]]
-create_debug_port u_ila_0_0 probe
-set_property port_width 3 [get_debug_ports u_ila_0_0/probe11]
-connect_debug_port u_ila_0_0/probe11 [get_nets [list {state[0]} {state[1]} {state[2]}]]
-create_debug_port u_ila_0_0 probe
-set_property port_width 8 [get_debug_ports u_ila_0_0/probe12]
-connect_debug_port u_ila_0_0/probe12 [get_nets [list {ti/D[0]} {ti/D[1]} {ti/D[2]} {ti/D[3]} {ti/D[4]} {ti/D[5]} {ti/D[6]} {ti/D[7]}]]
-create_debug_port u_ila_0_0 probe
-set_property port_width 3 [get_debug_ports u_ila_0_0/probe13]
-connect_debug_port u_ila_0_0/probe13 [get_nets [list {nextState[0]} {nextState[1]} {nextState[2]}]]
-create_debug_port u_ila_0_0 probe
-set_property port_width 1 [get_debug_ports u_ila_0_0/probe14]
-connect_debug_port u_ila_0_0/probe14 [get_nets [list ti/ch0out]]
-create_debug_port u_ila_0_0 probe
-set_property port_width 1 [get_debug_ports u_ila_0_0/probe15]
-connect_debug_port u_ila_0_0/probe15 [get_nets [list ti/ch1out]]
-create_debug_port u_ila_0_0 probe
-set_property port_width 1 [get_debug_ports u_ila_0_0/probe16]
-connect_debug_port u_ila_0_0/probe16 [get_nets [list ti/ch2out]]
-create_debug_port u_ila_0_0 probe
-set_property port_width 1 [get_debug_ports u_ila_0_0/probe17]
-connect_debug_port u_ila_0_0/probe17 [get_nets [list ti/ch3out]]
-create_debug_port u_ila_0_0 probe
-set_property port_width 1 [get_debug_ports u_ila_0_0/probe18]
-connect_debug_port u_ila_0_0/probe18 [get_nets [list CLK100MHZ_IBUF]]
-set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
-set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
-set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]
-connect_debug_port dbg_hub/clk [get_nets CLK100MHZ_IBUF_BUFG]
+#create_debug_core u_ila_0_0 ila
+#set_property ALL_PROBE_SAME_MU true [get_debug_cores u_ila_0_0]
+#set_property ALL_PROBE_SAME_MU_CNT 1 [get_debug_cores u_ila_0_0]
+#set_property C_ADV_TRIGGER false [get_debug_cores u_ila_0_0]
+#set_property C_DATA_DEPTH 16384 [get_debug_cores u_ila_0_0]
+#set_property C_EN_STRG_QUAL false [get_debug_cores u_ila_0_0]
+#set_property C_INPUT_PIPE_STAGES 0 [get_debug_cores u_ila_0_0]
+#set_property C_TRIGIN_EN false [get_debug_cores u_ila_0_0]
+#set_property C_TRIGOUT_EN false [get_debug_cores u_ila_0_0]
+#set_property port_width 1 [get_debug_ports u_ila_0_0/clk]
+#connect_debug_port u_ila_0_0/clk [get_nets [list CLK100MHZ_IBUF_BUFG]]
+#set_property port_width 17 [get_debug_ports u_ila_0_0/probe0]
+#connect_debug_port u_ila_0_0/probe0 [get_nets [list {ti/mix/intermediate[0]} {ti/mix/intermediate[1]} {ti/mix/intermediate[2]} {ti/mix/intermediate[3]} {ti/mix/intermediate[4]} {ti/mix/intermediate[5]} {ti/mix/intermediate[6]} {ti/mix/intermediate[7]} {ti/mix/intermediate[8]} {ti/mix/intermediate[9]} {ti/mix/intermediate[10]} {ti/mix/intermediate[11]} {ti/mix/intermediate[12]} {ti/mix/intermediate[13]} {ti/mix/intermediate[14]} {ti/mix/intermediate[15]} {ti/mix/intermediate[16]}]]
+#create_debug_port u_ila_0_0 probe
+#set_property port_width 17 [get_debug_ports u_ila_0_0/probe1]
+#connect_debug_port u_ila_0_0/probe1 [get_nets [list {ti/mix/c3[0]} {ti/mix/c3[1]} {ti/mix/c3[2]} {ti/mix/c3[3]} {ti/mix/c3[4]} {ti/mix/c3[5]} {ti/mix/c3[6]} {ti/mix/c3[7]} {ti/mix/c3[8]} {ti/mix/c3[9]} {ti/mix/c3[10]} {ti/mix/c3[11]} {ti/mix/c3[12]} {ti/mix/c3[13]} {ti/mix/c3[14]} {ti/mix/c3[15]} {ti/mix/c3[16]}]]
+#create_debug_port u_ila_0_0 probe
+#set_property port_width 17 [get_debug_ports u_ila_0_0/probe2]
+#connect_debug_port u_ila_0_0/probe2 [get_nets [list {ti/mix/c2[0]} {ti/mix/c2[1]} {ti/mix/c2[2]} {ti/mix/c2[3]} {ti/mix/c2[4]} {ti/mix/c2[5]} {ti/mix/c2[6]} {ti/mix/c2[7]} {ti/mix/c2[8]} {ti/mix/c2[9]} {ti/mix/c2[10]} {ti/mix/c2[11]} {ti/mix/c2[12]} {ti/mix/c2[13]} {ti/mix/c2[14]} {ti/mix/c2[15]} {ti/mix/c2[16]}]]
+#create_debug_port u_ila_0_0 probe
+#set_property port_width 17 [get_debug_ports u_ila_0_0/probe3]
+#connect_debug_port u_ila_0_0/probe3 [get_nets [list {ti/mix/c1[0]} {ti/mix/c1[1]} {ti/mix/c1[2]} {ti/mix/c1[3]} {ti/mix/c1[4]} {ti/mix/c1[5]} {ti/mix/c1[6]} {ti/mix/c1[7]} {ti/mix/c1[8]} {ti/mix/c1[9]} {ti/mix/c1[10]} {ti/mix/c1[11]} {ti/mix/c1[12]} {ti/mix/c1[13]} {ti/mix/c1[14]} {ti/mix/c1[15]} {ti/mix/c1[16]}]]
+#create_debug_port u_ila_0_0 probe
+#set_property port_width 17 [get_debug_ports u_ila_0_0/probe4]
+#connect_debug_port u_ila_0_0/probe4 [get_nets [list {ti/mix/c0[0]} {ti/mix/c0[1]} {ti/mix/c0[2]} {ti/mix/c0[3]} {ti/mix/c0[4]} {ti/mix/c0[5]} {ti/mix/c0[6]} {ti/mix/c0[7]} {ti/mix/c0[8]} {ti/mix/c0[9]} {ti/mix/c0[10]} {ti/mix/c0[11]} {ti/mix/c0[12]} {ti/mix/c0[13]} {ti/mix/c0[14]} {ti/mix/c0[15]} {ti/mix/c0[16]}]]
+#create_debug_port u_ila_0_0 probe
+#set_property port_width 4 [get_debug_ports u_ila_0_0/probe5]
+#connect_debug_port u_ila_0_0/probe5 [get_nets [list {ti/vol2[0]} {ti/vol2[1]} {ti/vol2[2]} {ti/vol2[3]}]]
+#create_debug_port u_ila_0_0 probe
+#set_property port_width 10 [get_debug_ports u_ila_0_0/probe6]
+#connect_debug_port u_ila_0_0/probe6 [get_nets [list {ti/tone0[0]} {ti/tone0[1]} {ti/tone0[2]} {ti/tone0[3]} {ti/tone0[4]} {ti/tone0[5]} {ti/tone0[6]} {ti/tone0[7]} {ti/tone0[8]} {ti/tone0[9]}]]
+#create_debug_port u_ila_0_0 probe
+#set_property port_width 4 [get_debug_ports u_ila_0_0/probe7]
+#connect_debug_port u_ila_0_0/probe7 [get_nets [list {ti/vol1[0]} {ti/vol1[1]} {ti/vol1[2]} {ti/vol1[3]}]]
+#create_debug_port u_ila_0_0 probe
+#set_property port_width 10 [get_debug_ports u_ila_0_0/probe8]
+#connect_debug_port u_ila_0_0/probe8 [get_nets [list {ti/tone1[0]} {ti/tone1[1]} {ti/tone1[2]} {ti/tone1[3]} {ti/tone1[4]} {ti/tone1[5]} {ti/tone1[6]} {ti/tone1[7]} {ti/tone1[8]} {ti/tone1[9]}]]
+#create_debug_port u_ila_0_0 probe
+#set_property port_width 4 [get_debug_ports u_ila_0_0/probe9]
+#connect_debug_port u_ila_0_0/probe9 [get_nets [list {ti/vol3[0]} {ti/vol3[1]} {ti/vol3[2]} {ti/vol3[3]}]]
+#create_debug_port u_ila_0_0 probe
+#set_property port_width 4 [get_debug_ports u_ila_0_0/probe10]
+#connect_debug_port u_ila_0_0/probe10 [get_nets [list {ti/vol0[0]} {ti/vol0[1]} {ti/vol0[2]} {ti/vol0[3]}]]
+#create_debug_port u_ila_0_0 probe
+#set_property port_width 3 [get_debug_ports u_ila_0_0/probe11]
+#connect_debug_port u_ila_0_0/probe11 [get_nets [list {state[0]} {state[1]} {state[2]}]]
+#create_debug_port u_ila_0_0 probe
+#set_property port_width 8 [get_debug_ports u_ila_0_0/probe12]
+#connect_debug_port u_ila_0_0/probe12 [get_nets [list {ti/D[0]} {ti/D[1]} {ti/D[2]} {ti/D[3]} {ti/D[4]} {ti/D[5]} {ti/D[6]} {ti/D[7]}]]
+#create_debug_port u_ila_0_0 probe
+#set_property port_width 3 [get_debug_ports u_ila_0_0/probe13]
+#connect_debug_port u_ila_0_0/probe13 [get_nets [list {nextState[0]} {nextState[1]} {nextState[2]}]]
+#create_debug_port u_ila_0_0 probe
+#set_property port_width 1 [get_debug_ports u_ila_0_0/probe14]
+#connect_debug_port u_ila_0_0/probe14 [get_nets [list ti/ch0out]]
+#create_debug_port u_ila_0_0 probe
+#set_property port_width 1 [get_debug_ports u_ila_0_0/probe15]
+#connect_debug_port u_ila_0_0/probe15 [get_nets [list ti/ch1out]]
+#create_debug_port u_ila_0_0 probe
+#set_property port_width 1 [get_debug_ports u_ila_0_0/probe16]
+#connect_debug_port u_ila_0_0/probe16 [get_nets [list ti/ch2out]]
+#create_debug_port u_ila_0_0 probe
+#set_property port_width 1 [get_debug_ports u_ila_0_0/probe17]
+#connect_debug_port u_ila_0_0/probe17 [get_nets [list ti/ch3out]]
+#create_debug_port u_ila_0_0 probe
+#set_property port_width 1 [get_debug_ports u_ila_0_0/probe18]
+#connect_debug_port u_ila_0_0/probe18 [get_nets [list CLK100MHZ_IBUF]]
+#set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
+#set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
+#set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]
+#connect_debug_port dbg_hub/clk [get_nets CLK100MHZ_IBUF_BUFG]
