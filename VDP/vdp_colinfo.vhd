@@ -36,9 +36,6 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 
-LIBRARY altera_mf;
-USE altera_mf.all;
-
 ENTITY vdp_colinfo IS
 	PORT
 	(
@@ -62,43 +59,18 @@ ARCHITECTURE SYN OF vdp_colinfo IS
 
 
 
-	COMPONENT altsyncram
-	GENERIC (
-		address_reg_b		: STRING;
-		clock_enable_input_a		: STRING;
-		clock_enable_input_b		: STRING;
-		clock_enable_output_a		: STRING;
-		clock_enable_output_b		: STRING;
-		indata_reg_b		: STRING;
-		intended_device_family		: STRING;
-		lpm_type		: STRING;
-		numwords_a		: NATURAL;
-		numwords_b		: NATURAL;
-		operation_mode		: STRING;
-		outdata_aclr_a		: STRING;
-		outdata_aclr_b		: STRING;
-		outdata_reg_a		: STRING;
-		outdata_reg_b		: STRING;
-		power_up_uninitialized		: STRING;
-		read_during_write_mode_mixed_ports		: STRING;
-		widthad_a		: NATURAL;
-		widthad_b		: NATURAL;
-		width_a		: NATURAL;
-		width_b		: NATURAL;
-		width_byteena_a		: NATURAL;
-		width_byteena_b		: NATURAL;
-		wrcontrol_wraddress_reg_b		: STRING
-	);
+	COMPONENT col_info_RAM
 	PORT (
-			wren_a	: IN STD_LOGIC ;
-			clock0	: IN STD_LOGIC ;
-			wren_b	: IN STD_LOGIC ;
-			address_a	: IN STD_LOGIC_VECTOR (8 DOWNTO 0);
-			address_b	: IN STD_LOGIC_VECTOR (8 DOWNTO 0);
-			q_a	: OUT STD_LOGIC_VECTOR (6 DOWNTO 0);
-			q_b	: OUT STD_LOGIC_VECTOR (6 DOWNTO 0);
-			data_a	: IN STD_LOGIC_VECTOR (6 DOWNTO 0);
-			data_b	: IN STD_LOGIC_VECTOR (6 DOWNTO 0)
+			wea	: IN STD_LOGIC ;
+			clka	: IN STD_LOGIC ;
+			clkb : IN STD_LOGIC ;
+			web	: IN STD_LOGIC ;
+			addra	: IN STD_LOGIC_VECTOR (8 DOWNTO 0);
+			addrb	: IN STD_LOGIC_VECTOR (8 DOWNTO 0);
+			douta	: OUT STD_LOGIC_VECTOR (6 DOWNTO 0);
+			doutb	: OUT STD_LOGIC_VECTOR (6 DOWNTO 0);
+			dina	: IN STD_LOGIC_VECTOR (6 DOWNTO 0);
+			dinb	: IN STD_LOGIC_VECTOR (6 DOWNTO 0)
 	);
 	END COMPONENT;
 
@@ -106,43 +78,18 @@ BEGIN
 	q_a    <= sub_wire0(6 DOWNTO 0);
 	q_b    <= sub_wire1(6 DOWNTO 0);
 
-	altsyncram_component : altsyncram
-	GENERIC MAP (
-		address_reg_b => "CLOCK0",
-		clock_enable_input_a => "BYPASS",
-		clock_enable_input_b => "BYPASS",
-		clock_enable_output_a => "BYPASS",
-		clock_enable_output_b => "BYPASS",
-		indata_reg_b => "CLOCK0",
-		intended_device_family => "Cyclone II",
-		lpm_type => "altsyncram",
-		numwords_a => 512,
-		numwords_b => 512,
-		operation_mode => "BIDIR_DUAL_PORT",
-		outdata_aclr_a => "NONE",
-		outdata_aclr_b => "NONE",
-		outdata_reg_a => "CLOCK0",
-		outdata_reg_b => "CLOCK0",
-		power_up_uninitialized => "FALSE",
-		read_during_write_mode_mixed_ports => "DONT_CARE",
-		widthad_a => 9,
-		widthad_b => 9,
-		width_a => 7,
-		width_b => 7,
-		width_byteena_a => 1,
-		width_byteena_b => 1,
-		wrcontrol_wraddress_reg_b => "CLOCK0"
-	)
+	col_info_ram_component : col_info_RAM
 	PORT MAP (
-		wren_a => wren_a,
-		clock0 => clock,
-		wren_b => wren_b,
-		address_a => address_a,
-		address_b => address_b,
-		data_a => data_a,
-		data_b => data_b,
-		q_a => sub_wire0,
-		q_b => sub_wire1
+		wea => wren_a,
+		web => wren_b,
+		clka => clock,
+		clkb => clock,
+		addra => address_a,
+		addrb => address_b,
+		dina => data_a,
+		dinb => data_b,
+		douta => sub_wire0,
+		doutb => sub_wire1
 	);
 
 

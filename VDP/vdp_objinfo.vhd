@@ -36,9 +36,6 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 
-LIBRARY altera_mf;
-USE altera_mf.all;
-
 ENTITY vdp_objinfo IS
 	PORT
 	(
@@ -58,70 +55,30 @@ ARCHITECTURE SYN OF vdp_objinfo IS
 
 
 
-	COMPONENT altsyncram
-	GENERIC (
-		address_reg_b		: STRING;
-		clock_enable_input_a		: STRING;
-		clock_enable_input_b		: STRING;
-		clock_enable_output_a		: STRING;
-		clock_enable_output_b		: STRING;
-		intended_device_family		: STRING;
-		lpm_type		: STRING;
-		numwords_a		: NATURAL;
-		numwords_b		: NATURAL;
-		operation_mode		: STRING;
-		outdata_aclr_b		: STRING;
-		outdata_reg_b		: STRING;
-		power_up_uninitialized		: STRING;
-		read_during_write_mode_mixed_ports		: STRING;
-		widthad_a		: NATURAL;
-		widthad_b		: NATURAL;
-		width_a		: NATURAL;
-		width_b		: NATURAL;
-		width_byteena_a		: NATURAL
-	);
+	COMPONENT obj_info_RAM
 	PORT (
-			wren_a	: IN STD_LOGIC ;
-			clock0	: IN STD_LOGIC ;
-			address_a	: IN STD_LOGIC_VECTOR (8 DOWNTO 0);
-			address_b	: IN STD_LOGIC_VECTOR (8 DOWNTO 0);
-			q_b	: OUT STD_LOGIC_VECTOR (15 DOWNTO 0);
-			data_a	: IN STD_LOGIC_VECTOR (15 DOWNTO 0)
+			wea	: IN STD_LOGIC ;
+			clka	: IN STD_LOGIC ;
+			clkb : IN STD_LOGIC ;
+			addra	: IN STD_LOGIC_VECTOR (8 DOWNTO 0);
+			addrb	: IN STD_LOGIC_VECTOR (8 DOWNTO 0);
+			doutb	: OUT STD_LOGIC_VECTOR (15 DOWNTO 0);
+			dina	: IN STD_LOGIC_VECTOR (15 DOWNTO 0)
 	);
 	END COMPONENT;
 
 BEGIN
 	q    <= sub_wire0(15 DOWNTO 0);
 
-	altsyncram_component : altsyncram
-	GENERIC MAP (
-		address_reg_b => "CLOCK0",
-		clock_enable_input_a => "BYPASS",
-		clock_enable_input_b => "BYPASS",
-		clock_enable_output_a => "BYPASS",
-		clock_enable_output_b => "BYPASS",
-		intended_device_family => "Cyclone II",
-		lpm_type => "altsyncram",
-		numwords_a => 512,
-		numwords_b => 512,
-		operation_mode => "DUAL_PORT",
-		outdata_aclr_b => "NONE",
-		outdata_reg_b => "CLOCK0",
-		power_up_uninitialized => "FALSE",
-		read_during_write_mode_mixed_ports => "DONT_CARE",
-		widthad_a => 9,
-		widthad_b => 9,
-		width_a => 16,
-		width_b => 16,
-		width_byteena_a => 1
-	)
+	obj_info_RAM_component : obj_info_RAM
 	PORT MAP (
-		wren_a => wren,
-		clock0 => clock,
-		address_a => wraddress,
-		address_b => rdaddress,
-		data_a => data,
-		q_b => sub_wire0
+		wea => wren,
+		clka => clock,
+		clkb => clock,
+		addra => wraddress,
+		addrb => rdaddress,
+		dina => data,
+		doutb => sub_wire0
 	);
 
 
