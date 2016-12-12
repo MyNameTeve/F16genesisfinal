@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2016.3 (64-bit)
+# SW Build 1682563 on Mon Oct 10 19:07:27 MDT 2016
+# IP Build 1681267 on Mon Oct 10 21:28:31 MDT 2016
+# Start of session at: Fri Dec 09 10:46:41 2016
+# Process ID: 16964
+# Current directory: C:/Workspace/F16genesisfinal/VDP/VSG.runs/col_info_RAM_synth_1
+# Command line: vivado.exe -log col_info_RAM.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source col_info_RAM.tcl
+# Log file: C:/Workspace/F16genesisfinal/VDP/VSG.runs/col_info_RAM_synth_1/col_info_RAM.vds
+# Journal file: C:/Workspace/F16genesisfinal/VDP/VSG.runs/col_info_RAM_synth_1\vivado.jou
+#-----------------------------------------------------------
+source col_info_RAM.tcl -notrace
