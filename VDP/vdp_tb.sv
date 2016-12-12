@@ -470,40 +470,4 @@ module vdp_tb(
                 end
             endcase
         end
- /*   
-     initial begin
-        CLK <=1'b1;
-        forever #5 CLK <= ~CLK;
-    end
-    
-    initial begin
-        @(posedge CLK);
-            RST_N <= 1'b0;  
-        @(posedge CLK);
-            RST_N <=1'b1;
-        @(posedge CLK);
-        @(posedge CLK);
-        @(posedge CLK);
-        @(posedge CLK);
-        @(posedge CLK);
-        @(posedge CLK);
-        @(posedge CLK);
-        @(posedge CLK);
-        @(posedge CLK);
-        @(posedge CLK);
-        @(posedge CLK);
-        @(posedge CLK);
-        @(posedge CLK);
-        @(posedge CLK);
-        @(posedge CLK);
-        @(posedge CLK);
-        @(posedge CLK);
-        @(posedge CLK);
-        @(posedge CLK);
-        @(posedge CLK);
-        #10000000;
-        @(posedge CLK);
-        INTERLACE <=1'b1;
-        $finish;
-     end*/
 endmodule
